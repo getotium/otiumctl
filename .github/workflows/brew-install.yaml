@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, macos-13, ubuntu-latest]
+        os: [macos-latest, macos-15-intel, ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Set up Homebrew (Linux)
