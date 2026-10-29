@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Set up Homebrew (Linux)
         if: runner.os == 'Linux'
-        uses: Homebrew/actions/setup-homebrew@master
+        uses: Homebrew/actions/setup-homebrew@main
       - name: Install from the tap
         run: brew install getotium/tap/otiumctl
       - name: Run it
