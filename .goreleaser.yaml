@@ -31,3 +31,27 @@ checksum:
 changelog:
   use: github
   sort: asc
+
+# The Homebrew cask, written to getotium/homebrew-tap on each release (GoReleaser replaced
+# formulae with casks; see goreleaser.com/deprecations/#brews):
+#   brew install getotium/tap/otiumctl
+# HOMEBREW_TAP_TOKEN is a fine-grained token with Contents: write on that repo only.
+homebrew_casks:
+  - name: otiumctl
+    binaries: [otiumctl]
+    directory: Casks
+    homepage: https://getotium.ai/docs/cli
+    description: Otium's command-line client
+    repository:
+      owner: getotium
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+    commit_author:
+      name: otium-release
+      email: noreply@getotium.ai
+    # The binaries are not yet signed or notarized, so macOS would quarantine a downloaded one and
+    # refuse to run it. Clear the flag on the staged binary, as GoReleaser's docs show.
+    hooks:
+      post:
+        install_steps: |
+          run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{ .StagedPath }}/otiumctl"]
