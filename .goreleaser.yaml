@@ -50,8 +50,9 @@ homebrew_casks:
       name: otium-release
       email: noreply@getotium.ai
     # The binaries are not yet signed or notarized, so macOS would quarantine a downloaded one and
-    # refuse to run it. Clear the flag on the staged binary, as GoReleaser's docs show.
+    # refuse to run it. Clear the flag on the staged binary, as GoReleaser's docs show. Only where
+    # xattr exists: Linux has none, and a failing hook aborts the install.
     hooks:
       post:
         install_steps: |
-          run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{ .StagedPath }}/otiumctl"]
+          run "/bin/sh", args: ["-c", "[ ! -x /usr/bin/xattr ] || /usr/bin/xattr -dr com.apple.quarantine \"$1\"", "sh", "{{ .StagedPath }}/otiumctl"]
