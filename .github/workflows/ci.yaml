@@ -1,0 +1,8 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  ci:
+    uses: getotium/.github/.github/workflows/go-ci.yaml@main

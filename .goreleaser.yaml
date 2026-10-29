@@ -1,0 +1,33 @@
+# Release builds of otiumctl: a static binary per platform, archived with the LICENSE and
+# README, and a checksums file. Runs from .github/workflows/release.yaml on a v* tag.
+version: 2
+
+project_name: otiumctl
+
+builds:
+  - id: otiumctl
+    main: .
+    binary: otiumctl
+    env:
+      - CGO_ENABLED=0 # the keychain clients are pure Go on every platform
+    goos: [darwin, linux, windows]
+    goarch: [amd64, arm64]
+    flags: [-trimpath]
+    ldflags:
+      - -s -w -X main.version={{.Tag}}
+
+archives:
+  - id: otiumctl
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    files: [LICENSE, README.md]
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  use: github
+  sort: asc

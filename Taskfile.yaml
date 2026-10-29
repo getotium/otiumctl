@@ -1,0 +1,25 @@
+version: "3"
+
+tasks:
+  check:
+    desc: The CI gate locally (gofmt, vet, lint, tests)
+    cmds:
+      - test -z "$(gofmt -l .)" || (gofmt -l . && exit 1)
+      - go vet ./...
+      - golangci-lint run ./...
+      - go test -race ./...
+
+  test:
+    desc: Run the tests
+    cmds:
+      - go test ./...
+
+  build:
+    desc: Build ./otiumctl for this machine
+    cmds:
+      - go build -trimpath -o otiumctl .
+
+  release:snapshot:
+    desc: Build every platform's archive into dist/ without publishing (needs goreleaser)
+    cmds:
+      - goreleaser release --snapshot --clean
